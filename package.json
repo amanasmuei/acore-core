@@ -1,6 +1,6 @@
 {
   "name": "@aman_asmuei/acore-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "The identity layer for the aman ecosystem — multi-tenant Identity records over MarkdownFileStorage (dev) and DatabaseStorage (server), built on @aman_asmuei/aman-core.",
   "type": "module",
   "main": "./dist/index.js",
