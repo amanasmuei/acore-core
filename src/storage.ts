@@ -1,6 +1,7 @@
 import * as path from "node:path";
 import * as os from "node:os";
 import {
+  type Scope,
   type Storage,
   MarkdownFileStorage,
   DatabaseStorage,
@@ -40,13 +41,42 @@ let _markdownStorage: MarkdownFileStorage<Identity> | null = null;
 let _databaseStorage: DatabaseStorage<Identity> | null = null;
 
 /**
+ * Default read-only scope inheritance policy for acore:
+ *
+ *   dev:plugin   → no fallback (root of the chain)
+ *   dev:copilot  → falls back to dev:plugin
+ *   dev:agent    → falls back to dev:plugin
+ *   dev:<other>  → falls back to dev:plugin
+ *   tg:* / agent:* → no fallback (different storage backend anyway)
+ *
+ * Rationale: aman-plugin is the flagship surface — it's the one most users
+ * set up first, and a new surface joining the ecosystem (Copilot, aman-agent,
+ * Cursor, ...) should automatically see the same identity without re-entry.
+ * Users who deliberately want an independent identity for a specific surface
+ * can opt out by writing to that scope directly; writes never cascade to the
+ * fallback target, so scope isolation is preserved for mutations.
+ *
+ * Override: pass a different `fallbackChain` to `MarkdownFileStorage` directly
+ * if the caller needs non-default inheritance (e.g., tests, custom surfaces).
+ */
+function defaultDevFallbackChain(requested: Scope): Scope[] {
+  if (requested.startsWith("dev:") && requested !== "dev:plugin") {
+    return ["dev:plugin"];
+  }
+  return [];
+}
+
+/**
  * Get the markdown-backed storage for dev-side scopes. Cached.
  */
 export function getMarkdownStorage(): MarkdownFileStorage<Identity> {
   if (!_markdownStorage) {
+    const root = getAcoreHome();
     _markdownStorage = new MarkdownFileStorage<Identity>({
-      root: getAcoreHome(),
+      root,
       filename: ACORE_FILENAME,
+      fallbackChain: defaultDevFallbackChain,
+      legacyPath: path.join(root, ACORE_FILENAME),
       ...identityCodec,
     });
   }
