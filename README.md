@@ -407,7 +407,7 @@ To stay focused, `acore-core` deliberately does not provide:
 | [@aman_asmuei/aman-mcp](https://github.com/amanasmuei/aman-mcp)         | MCP server aggregating all layers for any host      |
 | [@aman_asmuei/aman-agent](https://github.com/amanasmuei/aman-agent)     | Standalone CLI runtime, multi-LLM, scope-aware      |
 | [@aman_asmuei/acore](https://github.com/amanasmuei/acore)               | Single-user CLI — predates this library             |
-| [aman-plugin](https://github.com/amanasmuei/aman-plugin)                | Claude Code plugin (hooks + skills + MCP installer) |
+| [aman-claude-code](https://github.com/amanasmuei/aman-claude-code)                | Claude Code plugin (hooks + skills + MCP installer) |
 | [@aman_asmuei/aman](https://github.com/amanasmuei/aman)                 | Umbrella installer — one command for the ecosystem  |
 
 ---
