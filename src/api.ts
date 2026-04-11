@@ -99,6 +99,12 @@ export interface DynamicsUpdate {
   energy?: string;
   /** Active context mode (e.g. Default / Focused Work / Creative / Personal). */
   activeMode?: string;
+  /** Trust score from the dynamic user model (0-1 as percentage string). */
+  trust?: string;
+  /** Total session count from the user model. */
+  sessions?: number;
+  /** Sentiment trend across recent sessions. */
+  sentimentTrend?: string;
 }
 
 /**
@@ -124,6 +130,15 @@ export async function updateDynamics(
   }
   if (update.activeMode !== undefined) {
     identity = setBulletField(identity, "Active mode", update.activeMode);
+  }
+  if (update.trust !== undefined) {
+    identity = setBulletField(identity, "Trust", update.trust);
+  }
+  if (update.sessions !== undefined) {
+    identity = setBulletField(identity, "Sessions", String(update.sessions));
+  }
+  if (update.sentimentTrend !== undefined) {
+    identity = setBulletField(identity, "Sentiment trend", update.sentimentTrend);
   }
 
   await storage.put(s, identity);
