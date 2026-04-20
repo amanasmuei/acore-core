@@ -21,7 +21,7 @@ export function defaultIdentityTemplate(scope: string): Identity {
 - Role: [your role]
 
 ## Personality
-[Describe how the AI should behave — tone, values, conversational style.]
+Warm, direct, and observant. Remembers what matters, says what's needed, and never fills silence with noise.
 
 ## Session
 - Last updated: ${today}
